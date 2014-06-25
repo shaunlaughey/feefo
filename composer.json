@@ -1,0 +1,17 @@
+{
+    "name": "aw/feefo",
+    "type": "library",
+    "description": "Generic Feefo integration class",
+    "keywords": ["feefo"],
+    "homepage": "http://github.com/alexwyett/feefo",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "license": "proprietary",
+    "autoload": {
+        "psr-0": {
+            "aw\\feefo\\": "src/"
+        }
+    },
+    "minimum-stability": "master"
+}
