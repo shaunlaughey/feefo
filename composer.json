@@ -6,7 +6,7 @@
     "homepage": "http://github.com/CarltonSoftware/feefo",
     "require": {
         "php": ">=5.3.0"
-    },,
+    },
     "license": "proprietary",
     "type": "library",
     "autoload": {
