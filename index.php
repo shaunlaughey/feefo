@@ -1,7 +1,7 @@
 <?php
 
 require_once 'autoload.php';
-$feefo = new \aw\feefo\Feefo('www.originalcottages.co.uk/suffolksecrets', 'erm2rude');
+$feefo = new \aw\feefo\Feefo('www.domain.com', 'password');
 
 echo 'Feefo Integration Test';
 

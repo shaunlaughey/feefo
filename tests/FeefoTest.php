@@ -30,11 +30,9 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         
         // Website
         $this->assertEquals('www.feefouserdomain.com', $feefo->getWebsite());
-        $this->assertEquals('www.feefouserdomain.com', $feefo->getWebsiteEncoded());
         
         // Password
         $this->assertEquals('feefopassword', $feefo->getPassword());
-        $this->assertEquals('feefopassword', $feefo->getPasswordEncoded());
         
         // Set the other accessors
         $accessors = array(
@@ -50,11 +48,9 @@ class FeefoTest extends PHPUnit_Framework_TestCase
             $property = ucfirst($accessor);
             $setter = 'set' . $property;
             $getter = 'get' . $property;
-            $getterEncoded = 'get' . $property . 'Encoded';
             
             $feefo->$setter($value);
             $this->assertEquals($value, $feefo->$getter());
-            $this->assertEquals(urlencode($value), $feefo->$getterEncoded());
         }
         
         // Test the submission url
@@ -97,7 +93,6 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         $feefo->setServiceRating($rating);
         
         $this->assertEquals($rating, $feefo->getServiceRating());
-        $this->assertEquals(urlencode($rating), $feefo->getServiceRatingEncoded());
     }
     
     /**

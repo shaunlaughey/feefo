@@ -16,21 +16,21 @@ namespace aw\feefo;
  * @link        http://www.carltonsoftware.co.uk
  * @link        http://www.feefo.com/feefo/page.jsp?page=T9
  */
-class Feefo
+class Feefo extends FeefoBase
 {
     /**
      * Feefo username. Normally a domain name address
      *
      * @var string
      */
-	private $website;
+	protected $website;
     
     /**
      * Feefo password. Does what it says on the tin.
      *
      * @var string
      */
-	private $password;
+	protected $password;
     
     /**
      * Feefo submission url.
@@ -111,7 +111,7 @@ class Feefo
     {
         return sprintf(
             '%s?%s',
-			$this->getFeefoUrlEncoded(),
+			urlencode($this->feefoUrl),
             http_build_query(
                 array(
                     'website' => $this->getWebsite(),
@@ -126,19 +126,6 @@ class Feefo
                 )
             )
 		);
-        /* return sprintf(
-            '%s?website=%s&password=%s&orderref=%s&name=%s&email=%s&description=%s&servicerating=%s&servicecomment=%s&category=%s',
-			$this->getFeefoUrlEncoded(),
-			$this->getWebsiteEncoded(),
-			$this->getPasswordEncoded(),
-			$this->getOrderRefEncoded(),
-			$this->getNameEncoded(),
-			$this->getEmail(),
-			$this->getDescriptionEncoded(),
-			$this->getServiceRatingEncoded(),
-			$this->getServiceCommentEncoded(),
-			$this->getCategoryEncoded()
-		); */
     }
     
     /**
@@ -215,61 +202,4 @@ class Feefo
 		//Return the result as a string
 		return $res;
 	}
-    
-    /**
-     * Generic getter/setter
-     * 
-     * @param string $name Name of property
-     * @param array  $args Function arguments
-     *
-     * @throws \Exception
-     * 
-     * @return void 
-     */
-    public function __call($name, $args = array())
-    {
-        // This call method is only for accessors
-        if (strlen($name) > 3) {
-            // Get the property
-            $property = substr($name, 3, strlen($name));
-
-            // All properties will be camelcase, make first, letter lowercase
-            $property[0] = strtolower($property[0]);
-
-            switch (substr($name, 0, 3)) {
-            case 'set':
-                if (property_exists($this, $property)) {
-                
-                    // Only allow protected variables to be set
-                    $reflector = new \ReflectionClass(get_class($this));
-                    $prop = $reflector->getProperty($property);
-                    if ($prop->isPrivate()) {
-                        throw new \Exception(
-                            'Unable to set, property is private:' . __CLASS__ . ':' . $property
-                        );
-                    }
-                
-                    $this->$property = $args[0];
-                    return $this;
-                } else {
-                    throw new \Exception(
-                        'Unknown method called:' . __CLASS__ . ':' . $name
-                    );
-                }
-                break;
-            case 'get':
-                if (substr($property, -7) == 'Encoded') {
-                    $property = substr($property, 0, -7);
-                    return urlencode($this->$property);
-                } else if (property_exists($this, $property)) {
-                    return $this->$property;
-                } else {
-                    throw new \Exception(
-                        'Unknown method called:' . __CLASS__ . ':' . $name
-                    );
-                }
-                break;
-            }
-        }
-    }
 }
