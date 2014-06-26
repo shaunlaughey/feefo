@@ -29,7 +29,7 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         // Accessor unit tests
         
         // Website
-        $this->assertEquals('www.feefouserdomain.com', $feefo->getWebsite());
+        $this->assertEquals('www.feefouserdomain.com', $feefo->getLogon());
         
         // Password
         $this->assertEquals('feefopassword', $feefo->getPassword());
@@ -55,7 +55,7 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         
         // Test the submission url
         $this->assertEquals(
-            'https%3A%2F%2Fwww.feefo.com%2Ffeefo%2Fentersaleremotely.jsp?website=www.feefouserdomain.com&password=feefopassword&orderref=orderReference&name=customer+name&email=email%40emailaddress.com&description=This+is+a+description+of+the+customers+order&servicerating=%2B&servicecomment=This+is+a+comment+that+the+customer+has+supplied&category=Feefo+Category',
+            'https%3A%2F%2Fwww.feefo.com%2Ffeefo%2Fentersaleremotely.jsp?logon=www.feefouserdomain.com&password=feefopassword&email=email%40emailaddress.com&name=customer+name&description=This+is+a+description+of+the+customers+order&orderref=orderReference&servicerating=%2B&servicecomment=This+is+a+comment+that+the+customer+has+supplied&category=Feefo+Category',
             $feefo->getCommentUrl()
         );
     }

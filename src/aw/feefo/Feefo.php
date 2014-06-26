@@ -15,92 +15,98 @@ namespace aw\feefo;
  * @license     http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link        http://www.carltonsoftware.co.uk
  * @link        http://www.feefo.com/feefo/page.jsp?page=T9
+ * 
+ * @method string getLogon()    Return the feefo username
+ * @method string getPassword() Return the feefo password
+ * @method string getName()     Return the customer name
+ * @method string getEmail()    Return the customer email
+ * @method string getOrderRef() Return the order reference
+ *
+ * @method \aw\feefo\Feefo setLogon(string)     Set the Feefo username
+ * @method \aw\feefo\Feefo setPassword(string)  Set the Feefo password
+ * @method \aw\feefo\Feefo setName(integer)     Set the customer name
+ * @method \aw\feefo\Feefo setEmail(integer)    Set customer email
+ * @method \aw\feefo\Feefo setOrderRef(integer) Set order reference
  */
-class Feefo extends FeefoBase
+class Feefo extends Feedback
 {
     /**
      * Feefo username. Normally a domain name address
      *
      * @var string
      */
-	protected $website;
+    protected $logon;
     
     /**
      * Feefo password. Does what it says on the tin.
      *
      * @var string
      */
-	protected $password;
+    protected $password;
     
     /**
      * Feefo submission url.
      *
      * @var string
      */
-	private $feefoUrl = 'https://www.feefo.com/feefo/entersaleremotely.jsp';
+    private $feefoUrl = 'https://www.feefo.com/feefo/entersaleremotely.jsp';
     
     /**
      * Customer Name.
      *
      * @var string
      */
-	protected $name = '';
-    
-    /**
-     * Order Ref.
-     *
-     * @var string
-     */
-	protected $orderRef = '';
+    protected $name = '';
     
     /**
      * Customer Email.
      *
      * @var string
      */
-	protected $email = '';
+    protected $email = '';
     
     /**
-     * Description of sale.
+     * Order Ref.
      *
      * @var string
      */
-	protected $description = '';
+    protected $orderRef = '';
     
     /**
-     * Feefo category.
+     * Creates a new Feefo object
      *
-     * @var string
-     */
-	protected $category = '';
-    
-    /**
-     * Service Rating.
-     *
-     * @var string
-     */
-	protected $serviceRating = '';
-    
-    /**
-     * Service Comment.
-     *
-     * @var string
-     */
-	protected $serviceComment = '';
-	
-	/**
-	 * Creates a new Feefo object
-     *
-	 * @param string $website  A valid login for the website
-	 * @param string $password The Feefo password
+     * @param string $website  A valid login for the website
+     * @param string $password The Feefo password
      *
      * @return void
-	 */
-	function __construct($website, $password)
+     */
+    function __construct($logon, $password)
     {
-		$this->website = $website;
-		$this->password = $password;
-	}
+        $this->logon = $logon;
+        $this->password = $password;
+    }
+    
+    /**
+     * Description accessor
+     * 
+     * @param string $description Product description
+     * 
+     * @return Feefo
+     */
+    public function setDescription($description)
+    {
+        return $this->setProductDescription($description);
+    }
+    
+    /**
+     * Description accessor
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getProductDescription();
+    }
     
     /**
      * Return the submission url
@@ -109,23 +115,40 @@ class Feefo extends FeefoBase
      */
     public function getCommentUrl()
     {
+        $params = array(
+            'logon' => $this->getLogon(),
+            'password' => $this->getPassword(),
+            'email' => $this->getEmail(),
+            'name' => $this->getName(),
+            'description' => $this->getProductDescription(),
+            'orderref' => $this->getOrderRef()
+        );
+        
+        if ($this->getReviewDate()) {
+            $params['date'] = $this->getReviewDate()->format('Y-m-d');
+        }
+        
+        if (strlen($this->getServiceRating()) > 0) {
+            $params['servicerating'] = $this->getServiceRating();
+        }
+        
+        if (strlen($this->getServiceComment()) > 0) {
+            $params['servicecomment'] = $this->getServiceComment();
+        }
+        
+        if (strlen($this->getProductCode()) > 0) {
+            $params['itemref'] = $this->getProductCode();
+        }
+        
+        if (strlen($this->getCategory()) > 0) {
+            $params['category'] = $this->getCategory();
+        }
+        
         return sprintf(
             '%s?%s',
-			urlencode($this->feefoUrl),
-            http_build_query(
-                array(
-                    'website' => $this->getWebsite(),
-                    'password' => $this->getPassword(),
-                    'orderref' => $this->getOrderRef(),
-                    'name' => $this->getName(),
-                    'email' => $this->getEmail(),
-                    'description' => $this->getDescription(),
-                    'servicerating' => $this->getServiceRating(),
-                    'servicecomment' => $this->getServiceComment(),
-                    'category' => $this->getCategory()
-                )
-            )
-		);
+            urlencode($this->feefoUrl),
+            http_build_query($params)
+        );
     }
     
     /**
@@ -137,16 +160,16 @@ class Feefo extends FeefoBase
      */
     public function submit()
     {
-		$res = $this->_sendRequest();
-		
-		// Check the response
-		if ($res === FALSE) {
+        $res = $this->_sendRequest();
+        
+        // Check the response
+        if ($res === FALSE) {
             throw new \Exception('Unable to connect to Feefo');
-		} else if (substr(trim($res), 0, 4) != 'true') {
+        } else if (substr(trim($res), 0, 4) != 'true') {
             throw new \Exception($res);
-		} else {
-			return true;
-		}
+        } else {
+            return true;
+        }
     }
     
     /**
@@ -168,38 +191,18 @@ class Feefo extends FeefoBase
     }
     
     /**
-     * Set the service rating
+     * Sends the request to feefo
      *
-     * @param string $rating Service rating, should be --, -, + or ++
-     *
-     * @throws \Exception if service rating is incorrect
-     * 
-     * @return Feefo
+     * @return Resource
      */
-    public function setServiceRating($rating)
-    {
-		$allowedratings = array('+', '++', '-', '--');
-		if (!in_array($rating, $allowedratings)) {
-			throw new \Exception('Invalid rating specified: ' . $rating);
-		}
-        $this->serviceRating = $rating;
+    private function _sendRequest()
+    {    
+        $ch = curl_init($this->getCommentUrl());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //return the output into a variable
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //don't check SSL certificates
+        $res = curl_exec($ch);
         
-        return $this;
+        //Return the result as a string
+        return $res;
     }
-	
-	/**
-	 * Sends the request to feefo
-     *
-	 * @return Resource
-	 */
-	private function _sendRequest()
-    {	
-		$ch = curl_init($this->getCommentUrl());
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //return the output into a variable
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //don't check SSL certificates
-		$res = curl_exec($ch);
-		
-		//Return the result as a string
-		return $res;
-	}
 }
