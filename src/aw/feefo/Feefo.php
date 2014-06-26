@@ -136,16 +136,28 @@ class Feefo extends Feedback
             $params['date'] = $this->getReviewDate()->format('Y-m-d');
         }
         
-        if (strlen($this->getServiceRating()) > 0) {
+        if ($this->getServiceRating()) {
             $params['servicerating'] = $this->getServiceRating();
+        
+            if (strlen($this->getServiceRating()->getComment()) > 0) {
+                $params['servicecomment'] = $this->getServiceRating()->getComment();
+            }
         }
         
-        if (strlen($this->getServiceComment()) > 0) {
-            $params['servicecomment'] = $this->getServiceComment();
+        if ($this->getProductRating()) {
+            $params['productrating'] = $this->getProductRating();
+        
+            if (strlen($this->getProductRating()->getComment()) > 0) {
+                $params['productcomment'] = $this->getProductRating()->getComment();
+            }
         }
         
         if (strlen($this->getProductCode()) > 0) {
             $params['itemref'] = $this->getProductCode();
+        }
+        
+        if (strlen($this->getCategory()) > 0) {
+            $params['category'] = $this->getCategory();
         }
         
         // Test mode

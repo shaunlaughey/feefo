@@ -15,9 +15,10 @@ namespace aw\feefo;
  * @link        http://www.carltonsoftware.co.uk
  * @link        http://www.feefo.com/feefo/page.jsp?page=T9
  *
- * @method string getRating() Service Rating
+ * @method string getRating()  Service Rating
+ * @method string getComment() Service Comment
  *
- * @method \aw\feefo\Rating setRating(string) Set the Service rating
+ * @method \aw\feefo\Rating setComment(string) Set the Service comment
  */
 class Rating extends FeefoBase
 {
@@ -27,6 +28,13 @@ class Rating extends FeefoBase
      * @var string
      */
     protected $rating = '';
+    
+    /**
+     * Service Comment
+     *
+     * @var string
+     */
+    protected $comment = '';
     
     /**
      * Constructor
@@ -60,12 +68,32 @@ class Rating extends FeefoBase
     }
     
     /**
+     * Rating accessor
+     * 
+     * @param string $rating Attempt to set a new rating
+     * 
+     * @return \aw\feefo\Rating
+     * 
+     * @throws \Exception
+     */
+    public function setRating($rating)
+    {
+        if (in_array($rating, array('+', '++', '-', '--'))) {
+            $this->rating = $rating;
+            
+            return $this;
+        }
+        
+        throw new \Exception('Invalid rating specified');
+    }
+    
+    /**
      * Returns the string representation of the feefo rating
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->getRatingString();
+        return $this->getRating();
     }
 }
