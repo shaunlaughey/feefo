@@ -87,14 +87,20 @@ class FeedbackSummary extends FeefoBase
     /**
      * Factory Method
      *
-     * @param string  $logon Username for feefo
-     * @param string  $mode  Feed mode, service|product|both|productonly
-     * @param integer $limit Number of feedback requests to fetch
+     * @param string  $logon              Username for feefo
+     * @param string  $mode               Feed mode, service|product|both|productonly
+     * @param integer $limit              Number of feedback requests to fetch
+     * @param boolean $filterOutNegatives Suppress negative answers submitted 
+     * in the last two days that have not had a comment.
      * 
      * @return void
      */
-    public static function factory($logon, $mode = 'both', $limit = 20)
-    {
+    public static function factory(
+        $logon,
+        $mode = 'both',
+        $limit = 20,
+        $filterOutNegatives = true
+    ) {
         $summary = new \aw\feefo\FeedbackSummary($logon, $mode);
         $response = file_get_contents(
             sprintf(
@@ -104,7 +110,8 @@ class FeedbackSummary extends FeefoBase
                     array(
                         'json' => 'true',
                         'limit' => $limit,
-                        'mode' => $mode
+                        'mode' => $mode,
+                        'negativesanswered' => ($filterOutNegatives) ? 'true' : 'false'
                     )
                 )
             )
