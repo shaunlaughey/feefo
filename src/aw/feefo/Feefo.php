@@ -50,7 +50,7 @@ class Feefo extends Feedback
      *
      * @var string
      */
-    private $feefoUrl = 'https://www.feefo.com/feefo/entersaleremotely.jsp';
+    private $feefoUrl = 'http://www.feefo.com/feefo/entersaleremotely.jsp';
     
     /**
      * Customer Name.
@@ -148,10 +148,6 @@ class Feefo extends Feedback
             $params['itemref'] = $this->getProductCode();
         }
         
-        if (strlen($this->getCategory()) > 0) {
-            $params['category'] = $this->getCategory();
-        }
-        
         // Test mode
         if ($this->getTestMode()) {
             $params['testing'] = 'true';
@@ -159,7 +155,7 @@ class Feefo extends Feedback
         
         return sprintf(
             '%s?%s',
-            urlencode($this->feefoUrl),
+            $this->feefoUrl,
             http_build_query($params)
         );
     }
@@ -206,16 +202,16 @@ class Feefo extends Feedback
     /**
      * Sends the request to feefo
      *
-     * @return Resource
+     * @return string|boolean
      */
     private function _sendRequest()
-    {    
+    {
         $ch = curl_init($this->getCommentUrl());
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //return the output into a variable
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //don't check SSL certificates
-        $res = curl_exec($ch);
-        
-        //Return the result as a string
-        return $res;
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux i686; rv:20.0) Gecko/20121230 Firefox/20.0');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        return curl_exec($ch);
     }
 }
