@@ -21,12 +21,13 @@ namespace aw\feefo;
  * @method string getName()     Return the customer name
  * @method string getEmail()    Return the customer email
  * @method string getOrderRef() Return the order reference
+ * @method string getTestMode() Return Test Mode status
  *
  * @method \aw\feefo\Feefo setLogon(string)     Set the Feefo username
  * @method \aw\feefo\Feefo setPassword(string)  Set the Feefo password
  * @method \aw\feefo\Feefo setName(integer)     Set the customer name
- * @method \aw\feefo\Feefo setEmail(integer)    Set customer email
  * @method \aw\feefo\Feefo setOrderRef(integer) Set order reference
+ * @method \aw\feefo\Feefo setTestMode(boolean) Set test mode
  */
 class Feefo extends Feedback
 {
@@ -71,6 +72,13 @@ class Feefo extends Feedback
      * @var string
      */
     protected $orderRef = '';
+    
+    /**
+     * Test mode.
+     *
+     * @var boolean
+     */
+    protected $testMode = false;
     
     /**
      * Creates a new Feefo object
@@ -142,6 +150,11 @@ class Feefo extends Feedback
         
         if (strlen($this->getCategory()) > 0) {
             $params['category'] = $this->getCategory();
+        }
+        
+        // Test mode
+        if ($this->getTestMode()) {
+            $params['testing'] = 'true';
         }
         
         return sprintf(
