@@ -155,6 +155,10 @@ class FeedbackSummary extends FeefoBase
                         \aw\feefo\Feedback::factory($fbObj)
                     );
                 }
+            } else if (is_object($feedback->FEEDBACK)) {
+                $summary->addFeedBack(
+                    \aw\feefo\Feedback::factory($feedback->FEEDBACK)
+                );
             }
             
             return $summary;
