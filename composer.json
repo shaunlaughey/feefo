@@ -14,5 +14,5 @@
             "aw\\feefo\\": "src/"
         }
     },
-    "minimum-stability": "master"
+    "minimum-stability": "dev-master"
 }
