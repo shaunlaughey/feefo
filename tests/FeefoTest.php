@@ -42,7 +42,9 @@ class FeefoTest extends PHPUnit_Framework_TestCase
             'description' => 'This is a description of the customers order',
             'category' => 'Feefo Category',
             'serviceRating' => '+',
-            'serviceComment' => 'This is a comment that the customer has supplied',
+            'serviceComment' => 'This is a comment that the customer has supplied about the service',
+            'productRating' => '+',
+            'productComment' => 'This is a comment that the customer has supplied about the product',
         );
         foreach ($accessors as $accessor => $value) {
             $property = ucfirst($accessor);
@@ -55,7 +57,7 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         
         // Test the submission url
         $this->assertEquals(
-            'https%3A%2F%2Fwww.feefo.com%2Ffeefo%2Fentersaleremotely.jsp?logon=www.feefouserdomain.com&password=feefopassword&email=email%40emailaddress.com&name=customer+name&description=This+is+a+description+of+the+customers+order&orderref=orderReference&servicerating=%2B&servicecomment=This+is+a+comment+that+the+customer+has+supplied&category=Feefo+Category',
+            'http://www.feefo.com/feefo/entersaleremotely.jsp?logon=www.feefouserdomain.com&password=feefopassword&email=email%40emailaddress.com&name=customer+name&description=This+is+a+description+of+the+customers+order&orderref=orderReference&servicecomment=This+is+a+comment+that+the+customer+has+supplied+about+the+service&productcomment=This+is+a+comment+that+the+customer+has+supplied+about+the+product&category=Feefo+Category',
             $feefo->getCommentUrl()
         );
     }
@@ -92,7 +94,7 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         $feefo = new aw\feefo\Feefo('www.feefouserdomain.com', 'feefopassword');
         $feefo->setServiceRating($rating);
         
-        $this->assertEquals($rating, $feefo->getServiceRating());
+        $this->assertEquals($rating, $feefo->getServiceRating()->getRating());
     }
     
     /**
