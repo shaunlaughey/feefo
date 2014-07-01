@@ -133,23 +133,31 @@ class Feedback extends FeefoBase
      * @return \aw\feefo\Feedback
      */
     public static function factory($object)
-    {
+    {        
         $feedback = new \aw\feefo\Feedback();
-        $feedback->setId($object->FEEDBACKID);
-        $feedback->setComment($object->CUSTOMERCOMMENT);
-        $feedback->setProductDescription($object->DESCRIPTION);
-        $feedback->setReviewDate(new \DateTime($object->HREVIEWDATE));
-        $feedback->setReviewRating($object->HREVIEWRATING);
-        $feedback->setLink($object->LINK);
-        $feedback->setProductCode($object->PRODUCTCODE);
-        $feedback->setProductRating(
-            new \aw\feefo\Rating($object->PRODUCTRATING)
+        $accessors = array(
+            'id' => 'FEEDBACKID',
+            'comment' => 'CUSTOMERCOMMENT',
+            'productDescription' => 'DESCRIPTION',
+            'reviewRating' => 'HREVIEWRATING',
+            'link' => 'LINK',
+            'productCode' => 'PRODUCTCODE',
+            'readMoreUrl' => 'READMOREURL',
+            'facebookShareLink' => 'FACEBOOKSHARELINK',
+            'productRating' => 'PRODUCTRATING',
+            'serviceRating' => 'SERVICERATING'
         );
-        $feedback->setReadMoreUrl($object->READMOREURL);
-        $feedback->setServiceRating(
-            new \aw\feefo\Rating($object->SERVICERATING)
-        );
-        $feedback->setFacebookShareLink($object->FACEBOOKSHARELINK);
+        
+        foreach ($accessors as $accessor => $property) {
+            if (property_exists($object, $property)) {
+                $setter = 'set' . ucfirst($accessor);
+                $feedback->$setter($object->$property);
+            }
+        }
+        
+        if (property_exists($object, 'HREVIEWDATE')) {
+            $feedback->setReviewDate(new \DateTime($object->HREVIEWDATE));
+        }
         
         return $feedback;
     }
