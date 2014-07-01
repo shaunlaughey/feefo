@@ -137,7 +137,7 @@ class Feefo extends Feedback
         }
         
         if ($this->getServiceRating()) {
-            $params['servicerating'] = $this->getServiceRating();
+            $params['servicerating'] = (string) $this->getServiceRating();
         
             if (strlen($this->getServiceRating()->getComment()) > 0) {
                 $params['servicecomment'] = $this->getServiceRating()->getComment();
