@@ -145,7 +145,7 @@ class Feefo extends Feedback
         }
         
         if ($this->getProductRating()) {
-            $params['productrating'] = $this->getProductRating();
+            $params['productrating'] = (string) $this->getProductRating();
         
             if (strlen($this->getProductRating()->getComment()) > 0) {
                 $params['productcomment'] = $this->getProductRating()->getComment();
