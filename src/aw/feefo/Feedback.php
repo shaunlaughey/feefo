@@ -126,6 +126,19 @@ class Feedback extends FeefoBase
     protected $category = '';
     
     /**
+     * Vendor response 
+     * 
+     * @var string
+     */
+    protected $vendorComment = '';
+    
+    /**
+     * All comments
+     * @var string
+     */
+    protected $furtherCommentsThread = '';
+    
+    /**
      * Factory method
      *
      * @param object $object JSON Object
@@ -145,7 +158,9 @@ class Feedback extends FeefoBase
             'readMoreUrl' => 'READMOREURL',
             'facebookShareLink' => 'FACEBOOKSHARELINK',
             'productRating' => 'PRODUCTRATING',
-            'serviceRating' => 'SERVICERATING'
+            'serviceRating' => 'SERVICERATING',
+            'vendorComment' => 'VENDORCOMMENT',
+            'furtherCommentsThread' => 'FURTHERCOMMENTSTHREAD'
         );
         
         foreach ($accessors as $accessor => $property) {
@@ -261,4 +276,14 @@ class Feedback extends FeefoBase
         
         return '';
     }
+    
+    public function getVendorComment() {
+        return $this->vendorComment;
+    }
+
+    public function setVendorComment($vendorComment) {
+        $this->vendorComment = $vendorComment;
+        return $this;
+    }
+    
 }
