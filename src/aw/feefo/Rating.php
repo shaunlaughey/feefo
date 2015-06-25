@@ -64,6 +64,10 @@ class Rating extends FeefoBase
             return 'Good';
         case '++':
             return 'Excellent';
+        case 'NA':
+            return 'Not Tried Yet';
+	case 'W':
+	    return 'Withdrawn';
         }
     }
     
@@ -78,13 +82,12 @@ class Rating extends FeefoBase
      */
     public function setRating($rating)
     {
-        if (in_array($rating, array('+', '++', '-', '--'))) {
+        if (in_array($rating, array('NA', '+', '++', '-', '--','W'))) {
             $this->rating = $rating;
-            
             return $this;
         }
         
-        throw new \Exception('Invalid rating specified');
+        throw new \Exception('Invalid rating specified - ' . $rating);
     }
     
     /**
