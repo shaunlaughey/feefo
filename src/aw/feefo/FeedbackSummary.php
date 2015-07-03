@@ -102,7 +102,7 @@ class FeedbackSummary extends FeefoBase
         $filterOutNegatives = true
     ) {
         $summary = new \aw\feefo\FeedbackSummary($logon, $mode);
-        $response = file_get_contents(
+        $response = @file_get_contents(
             sprintf(
                 'http://www.feefo.com/feefo/xmlfeed.jsp?logon=%s&%s',
                 $logon,
