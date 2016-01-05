@@ -73,18 +73,14 @@ class Rating extends FeefoBase
      * @param string $rating Attempt to set a new rating
      * 
      * @return \aw\feefo\Rating
-     * 
-     * @throws \Exception
      */
     public function setRating($rating)
     {
         if (in_array($rating, array('+', '++', '-', '--'))) {
             $this->rating = $rating;
-            
-            return $this;
         }
-        
-        throw new \Exception('Invalid rating specified');
+            
+        return $this;
     }
     
     /**
