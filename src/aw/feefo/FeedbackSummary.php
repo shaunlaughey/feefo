@@ -139,7 +139,7 @@ class FeedbackSummary extends FeefoBase
             $st->setBad($feedback->SUMMARY->SERVICEBAD);
             $st->setPoor($feedback->SUMMARY->SERVICEPOOR);
             $st->setGood($feedback->SUMMARY->SERVICEGOOD);
-            $st->setExcellent($feedback->SUMMARY->SERVICEEXCELLENT);
+            $st->setExcellent($feedback->SUMMARY->SERVICEXCELLENT);
             $summary->setServiceRating($st);
             
             // Set the totals
