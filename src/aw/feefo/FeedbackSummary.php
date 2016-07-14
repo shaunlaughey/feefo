@@ -53,6 +53,13 @@ class FeedbackSummary extends FeefoBase
      * @var integer
      */
     protected $numberOfRatings;
+
+    /**
+     * Total number of responses
+     *
+     * @var integer
+     */
+    protected $totalResponses;
     
     /**
      * Product rating object
@@ -147,6 +154,7 @@ class FeedbackSummary extends FeefoBase
             $summary->setBestRating($feedback->SUMMARY->BEST);
             $summary->setWorstRating($feedback->SUMMARY->WORST);
             $summary->setNumberOfRatings($feedback->SUMMARY->COUNT);
+            $summary->setTotalResponses($feedback->SUMMARY->TOTALRESPONSES);
             
             // Set miscelaneous
             $summary->setSupplierLogo($feedback->SUMMARY->SUPPLIERLOGO);
