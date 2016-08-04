@@ -99,6 +99,8 @@ class FeedbackSummary extends FeefoBase
      * @param integer $limit              Number of feedback requests to fetch
      * @param boolean $filterOutNegatives Suppress negative answers submitted 
      * in the last two days that have not had a comment.
+     * @param string  $since              day, week, month, 6months, year or all. If not specified,
+     * the default for the Feefo account will be used.
      * 
      * @return void
      */
@@ -106,7 +108,8 @@ class FeedbackSummary extends FeefoBase
         $logon,
         $mode = 'both',
         $limit = 20,
-        $filterOutNegatives = true
+        $filterOutNegatives = true,
+        $since = null
     ) {
         $summary = new \aw\feefo\FeedbackSummary($logon, $mode);
         $response = @file_get_contents(
@@ -118,7 +121,8 @@ class FeedbackSummary extends FeefoBase
                         'json' => 'true',
                         'limit' => $limit,
                         'mode' => $mode,
-                        'negativesanswered' => ($filterOutNegatives) ? 'true' : 'false'
+                        'negativesanswered' => ($filterOutNegatives) ? 'true' : 'false',
+                        'since' => $since
                     )
                 )
             )
