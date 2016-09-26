@@ -139,10 +139,14 @@ class FeedbackSummary extends FeefoBase
             
             // Set the service/product ratings
             $st = new \aw\feefo\SummaryTotal();
-            $st->setBad($feedback->SUMMARY->PRODUCTBAD);
-            $st->setPoor($feedback->SUMMARY->PRODUCTPOOR);
-            $st->setGood($feedback->SUMMARY->PRODUCTGOOD);
-            $st->setExcellent($feedback->SUMMARY->PRODUCTEXCELLENT);
+            foreach (array('bad', 'poor', 'good', 'excellent') as $r) {
+                $up = 'PRODUCT' . strtoupper($r);
+                $set = 'set' . ucfirst($r);
+                if (property_exists($feedback->SUMMARY,  $up)) {
+                    $st->$set($feedback->SUMMARY->$up);
+                }
+            }
+            
             $summary->setProductRating($st);
             
             // Set the service/product ratings
