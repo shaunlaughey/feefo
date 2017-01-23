@@ -25,6 +25,7 @@ namespace aw\feefo;
  * @method string           getProductDescription() Returns the product description
  * @method \aw\feefo\Rating getProductRating()      Returns the product rating
  * @method \aw\feefo\Rating getServiceRating()      Returns the service rating
+ * @method string           getVendorComment()      Returns the vendor comment
  * @method string           getReadMoreUrl()        Returns the read more url
  * @method string           getCategory()           Returns the category
  * @method string           getCustomer()           Returns the customer
@@ -114,6 +115,13 @@ class Feedback extends FeefoBase
     protected $serviceRating;
     
     /**
+     * Vendor Comment
+     *
+     * @var string
+     */
+    protected $vendorComment = '';
+    
+    /**
      * Read More Url
      *
      * @var string
@@ -155,7 +163,8 @@ class Feedback extends FeefoBase
             'readMoreUrl' => 'READMOREURL',
             'facebookShareLink' => 'FACEBOOKSHARELINK',
             'productRating' => 'PRODUCTRATING',
-            'serviceRating' => 'SERVICERATING'
+            'serviceRating' => 'SERVICERATING',
+            'vendorComment' => 'VENDORCOMMENT'
         );
         
         foreach ($accessors as $accessor => $property) {
