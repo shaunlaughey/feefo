@@ -50,7 +50,7 @@ class Feefo extends Feedback
      *
      * @var string
      */
-    private $feefoUrl = 'http://www.feefo.com/feefo/entersaleremotely.jsp';
+    private $feefoUrl = 'https://admin.feefo.com/api/entersaleremotely';
     
     /**
      * Customer Name.

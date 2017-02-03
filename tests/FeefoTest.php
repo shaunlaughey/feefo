@@ -57,7 +57,7 @@ class FeefoTest extends PHPUnit_Framework_TestCase
         
         // Test the submission url
         $this->assertEquals(
-            'http://www.feefo.com/feefo/entersaleremotely.jsp?logon=www.feefouserdomain.com&password=feefopassword&email=email%40emailaddress.com&name=customer+name&description=This+is+a+description+of+the+customers+order&orderref=orderReference&servicecomment=This+is+a+comment+that+the+customer+has+supplied+about+the+service&productcomment=This+is+a+comment+that+the+customer+has+supplied+about+the+product&category=Feefo+Category',
+            'https://admin.feefo.com/api/entersaleremotely?logon=www.feefouserdomain.com&password=feefopassword&email=email%40emailaddress.com&name=customer+name&description=This+is+a+description+of+the+customers+order&orderref=orderReference&servicecomment=This+is+a+comment+that+the+customer+has+supplied+about+the+service&productcomment=This+is+a+comment+that+the+customer+has+supplied+about+the+product&category=Feefo+Category',
             $feefo->getCommentUrl()
         );
     }
