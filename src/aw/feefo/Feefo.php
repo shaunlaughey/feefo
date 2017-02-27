@@ -185,8 +185,8 @@ class Feefo extends Feedback
         
         // Check the response
         if ($res === FALSE) {
-            throw new \Exception('Unable to connect to Feefo');
-        } else if (substr(trim($res), 0, 4) != 'true') {
+            throw new \Exception('Unable to connect to Feefo');  
+        } else if (substr(trim($res), 0, 4) != 'true' && strpos($res, 'successfully') === false) {
             throw new \Exception($res);
         } else {
             return true;
