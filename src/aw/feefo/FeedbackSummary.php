@@ -48,6 +48,13 @@ class FeedbackSummary extends FeefoBase
     protected $worstRating;
     
     /**
+     * Five star average
+     *
+     * @var integer
+     */
+    protected $fiveStarAverage;
+    
+    /**
      * Number of ratings
      *
      * @var integer
@@ -161,6 +168,7 @@ class FeedbackSummary extends FeefoBase
             $summary->setAverageRating($feedback->SUMMARY->AVERAGE);
             $summary->setBestRating($feedback->SUMMARY->BEST);
             $summary->setWorstRating($feedback->SUMMARY->WORST);
+            $summary->setFiveStarAverage($feedback->SUMMARY->FIVESTARAVERAGE);
             $summary->setNumberOfRatings($feedback->SUMMARY->COUNT);
             $summary->setTotalResponses($feedback->SUMMARY->TOTALRESPONSES);
             
