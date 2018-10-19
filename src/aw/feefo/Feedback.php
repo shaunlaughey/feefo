@@ -25,8 +25,10 @@ namespace aw\feefo;
  * @method string           getProductDescription() Returns the product description
  * @method \aw\feefo\Rating getProductRating()      Returns the product rating
  * @method \aw\feefo\Rating getServiceRating()      Returns the service rating
+ * @method string           getVendorComment()      Returns the vendor comment
  * @method string           getReadMoreUrl()        Returns the read more url
  * @method string           getCategory()           Returns the category
+ * @method string           getCustomer()           Returns the customer
  *
  * @method \aw\feefo\Feedback setId(integer)                Set the feedback id
  * @method \aw\feefo\Feedback setComment(string)            Set the customer comment
@@ -38,6 +40,7 @@ namespace aw\feefo;
  * @method \aw\feefo\Feedback setProductCode(string)        Set the product code
  * @method \aw\feefo\Feedback setReadMoreUrl(string)        Set the read more url
  * @method \aw\feefo\Feedback setCategory(string)           Set the product category
+ * @method \aw\feefo\Feedback setCustomer(string)           Set the customer
  */
 class Feedback extends FeefoBase
 {
@@ -112,6 +115,13 @@ class Feedback extends FeefoBase
     protected $serviceRating;
     
     /**
+     * Vendor Comment
+     *
+     * @var string
+     */
+    protected $vendorComment = '';
+    
+    /**
      * Read More Url
      *
      * @var string
@@ -138,6 +148,12 @@ class Feedback extends FeefoBase
      */
     protected $furtherCommentsThread = '';
     
+     * Customer name
+     * 
+     * @var string
+     */
+    protected $customer = '';
+
     /**
      * Factory method
      *
@@ -172,6 +188,12 @@ class Feedback extends FeefoBase
         
         if (property_exists($object, 'HREVIEWDATE')) {
             $feedback->setReviewDate(new \DateTime($object->HREVIEWDATE));
+        }
+        
+        if (property_exists($object, 'PUBLICCUSTOMER') 
+            && property_exists($object->PUBLICCUSTOMER, 'NAME')
+        ) {
+            $feedback->setCustomer($object->PUBLICCUSTOMER->NAME);
         }
         
         return $feedback;

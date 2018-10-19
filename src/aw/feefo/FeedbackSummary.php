@@ -48,11 +48,25 @@ class FeedbackSummary extends FeefoBase
     protected $worstRating;
     
     /**
+     * Five star average
+     *
+     * @var integer
+     */
+    protected $fiveStarAverage;
+    
+    /**
      * Number of ratings
      *
      * @var integer
      */
     protected $numberOfRatings;
+
+    /**
+     * Total number of responses
+     *
+     * @var integer
+     */
+    protected $totalResponses;
     
     /**
      * Product rating object
@@ -92,6 +106,8 @@ class FeedbackSummary extends FeefoBase
      * @param integer $limit              Number of feedback requests to fetch
      * @param boolean $filterOutNegatives Suppress negative answers submitted 
      * in the last two days that have not had a comment.
+     * @param string  $since              day, week, month, 6months, year or all. If not specified,
+     * the default for the Feefo account will be used.
      * 
      * @return void
      */
@@ -99,10 +115,11 @@ class FeedbackSummary extends FeefoBase
         $logon,
         $mode = 'both',
         $limit = 20,
-        $filterOutNegatives = true
+        $filterOutNegatives = true,
+        $since = null
     ) {
         $summary = new \aw\feefo\FeedbackSummary($logon, $mode);
-        $response = file_get_contents(
+        $response = @file_get_contents(
             sprintf(
                 'http://www.feefo.com/feefo/xmlfeed.jsp?logon=%s&%s',
                 $logon,
@@ -111,7 +128,8 @@ class FeedbackSummary extends FeefoBase
                         'json' => 'true',
                         'limit' => $limit,
                         'mode' => $mode,
-                        'negativesanswered' => ($filterOutNegatives) ? 'true' : 'false'
+                        'negativesanswered' => ($filterOutNegatives) ? 'true' : 'false',
+                        'since' => $since
                     )
                 )
             )
@@ -128,10 +146,14 @@ class FeedbackSummary extends FeefoBase
             
             // Set the service/product ratings
             $st = new \aw\feefo\SummaryTotal();
-            $st->setBad($feedback->SUMMARY->PRODUCTBAD);
-            $st->setPoor($feedback->SUMMARY->PRODUCTPOOR);
-            $st->setGood($feedback->SUMMARY->PRODUCTGOOD);
-            $st->setExcellent($feedback->SUMMARY->PRODUCTEXCELLENT);
+            foreach (array('bad', 'poor', 'good', 'excellent') as $r) {
+                $up = 'PRODUCT' . strtoupper($r);
+                $set = 'set' . ucfirst($r);
+                if (property_exists($feedback->SUMMARY,  $up)) {
+                    $st->$set($feedback->SUMMARY->$up);
+                }
+            }
+            
             $summary->setProductRating($st);
             
             // Set the service/product ratings
@@ -139,14 +161,16 @@ class FeedbackSummary extends FeefoBase
             $st->setBad($feedback->SUMMARY->SERVICEBAD);
             $st->setPoor($feedback->SUMMARY->SERVICEPOOR);
             $st->setGood($feedback->SUMMARY->SERVICEGOOD);
-            $st->setExcellent($feedback->SUMMARY->SERVICEEXCELLENT);
+            $st->setExcellent($feedback->SUMMARY->SERVICEXCELLENT);
             $summary->setServiceRating($st);
             
             // Set the totals
             $summary->setAverageRating($feedback->SUMMARY->AVERAGE);
             $summary->setBestRating($feedback->SUMMARY->BEST);
             $summary->setWorstRating($feedback->SUMMARY->WORST);
+            $summary->setFiveStarAverage($feedback->SUMMARY->FIVESTARAVERAGE);
             $summary->setNumberOfRatings($feedback->SUMMARY->COUNT);
+            $summary->setTotalResponses($feedback->SUMMARY->TOTALRESPONSES);
             
             // Set miscelaneous
             $summary->setSupplierLogo($feedback->SUMMARY->SUPPLIERLOGO);

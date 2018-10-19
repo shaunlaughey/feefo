@@ -50,7 +50,7 @@ class Feefo extends Feedback
      *
      * @var string
      */
-    private $feefoUrl = 'http://www.feefo.com/feefo/entersaleremotely.jsp';
+    private $feefoUrl = 'https://admin.feefo.com/api/entersaleremotely';
     
     /**
      * Customer Name.
@@ -185,8 +185,8 @@ class Feefo extends Feedback
         
         // Check the response
         if ($res === FALSE) {
-            throw new \Exception('Unable to connect to Feefo');
-        } else if (substr(trim($res), 0, 4) != 'true') {
+            throw new \Exception('Unable to connect to Feefo');  
+        } else if (substr(trim($res), 0, 4) != 'true' && strpos($res, 'successfully') === false) {
             throw new \Exception($res);
         } else {
             return true;
