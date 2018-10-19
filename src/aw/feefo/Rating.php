@@ -56,18 +56,18 @@ class Rating extends FeefoBase
     public function getRatingString()
     {
         switch ($this->getRating()) {
-        case '--':
-            return 'Bad';
-        case '-':
-            return 'Poor';
-        case '+':
-            return 'Good';
-        case '++':
-            return 'Excellent';
-        case 'NA':
-            return 'Not Tried Yet';
-	case 'W':
-	    return 'Withdrawn';
+            case '--':
+                return 'Bad';
+            case '-':
+                return 'Poor';
+            case '+':
+                return 'Good';
+            case '++':
+                return 'Excellent';
+            case 'NA':
+                return 'Not Tried Yet';
+            case 'W':
+                return 'Withdrawn';
         }
     }
     
